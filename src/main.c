@@ -504,7 +504,8 @@ int main(void)
 
     // now we can "print"
     picoprobe_info("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
-    picoprobe_info("                     Welcome to Yet Another Picoprobe v" PICOPROBE_VERSION_STRING "-" GIT_HASH "\n");
+                                                    
+    picoprobe_info("                     Welcome to LitLink DelugeProbe v" PICOPROBE_VERSION_STRING "-" GIT_HASH "\n");
     picoprobe_info("Features:\n");
     picoprobe_info(" ");
 #if CFG_TUD_VENDOR
@@ -527,7 +528,11 @@ int main(void)
 #endif
     picoprobe_info_out("\n");
 #if defined(TARGET_BOARD_PICO)
-    picoprobe_info("  Probe HW: Pico\n");
+    #if defined(BOARD_QT_PY_RP2040)
+        picoprobe_info("  Probe HW: QT Py RP2040\n");
+    #else
+        picoprobe_info("  Probe HW: Pico\n");
+    #endif
 #elif defined(TARGET_BOARD_PICO_W)
     picoprobe_info("  Probe HW: Pico_W\n");
 #elif defined(TARGET_BOARD_PICO_DEBUG_PROBE)

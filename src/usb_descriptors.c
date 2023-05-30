@@ -42,8 +42,13 @@ tusb_desc_device_t const desc_device =
     .bDeviceProtocol    = 0x00,
     .bMaxPacketSize0    = CFG_TUD_ENDPOINT0_SIZE,
 
+#ifdef BOARD_QT_PY_RP2040
+    .idVendor           = 0x239A, // Hmm
+    .idProduct          = 0x80f7, // QT Py RP2040
+#else
     .idVendor           = 0x2E8A, // Pi
     .idProduct          = 0x000c, // CMSIS-DAP adapter
+#endif
     .bcdDevice          = (PICOPROBE_VERSION_MAJOR << 8) + (16*(PICOPROBE_VERSION_MINOR / 10)) + PICOPROBE_VERSION_MINOR % 10,
     .iManufacturer      = 0x01,
     .iProduct           = 0x02,
@@ -222,15 +227,15 @@ uint8_t const * tud_descriptor_configuration_cb(uint8_t index)
 char const* string_desc_arr [] =
 {
   (const char[]) { 0x09, 0x04 },       // 0: is supported language is English (0x0409)
-  "RaspberryPi",                       // 1: Manufacturer
-  "YAPicoprobe CMSIS-DAP",             // 2: Product,                                 **MUST** contain "CMSIS-DAP" to enable "CMSIS-DAP v1"
+  "LitLink",                           // 1: Manufacturer
+  "DelugeProbe CMSIS-DAP",             // 2: Product,                                 **MUST** contain "CMSIS-DAP" to enable "CMSIS-DAP v1"
   usb_serial,                          // 3: Serial, uses flash unique ID
-  "YAPicoprobe CMSIS-DAP v2",          // 4: Interface descriptor for Bulk transport, **MUST** contain "CMSIS-DAP" to enable "CMSIS-DAP v2"
-  "YAPicoprobe CMSIS-DAP v1",          // 5: Interface descriptor for HID transport
-  "YAPicoprobe Flash Drive",           // 6: Interface descriptor for MSC interface
-  "YAPicoprobe CDC-UART",              // 7: Interface descriptor for CDC UART (from target)
-  "YAPicoprobe CDC-SIGROK",            // 8: Interface descriptor for CDC SIGROK
-  "YAPicoprobe CDC-DEBUG",             // 9: Interface descriptor for CDC DEBUG
+  "DelugeProbe CMSIS-DAP v2",          // 4: Interface descriptor for Bulk transport, **MUST** contain "CMSIS-DAP" to enable "CMSIS-DAP v2"
+  "DelugeProbe CMSIS-DAP v1",          // 5: Interface descriptor for HID transport
+  "DelugeProbe Flash Drive",           // 6: Interface descriptor for MSC interface
+  "DelugeProbe CDC-UART",              // 7: Interface descriptor for CDC UART (from target)
+  "DelugeProbe CDC-SIGROK",            // 8: Interface descriptor for CDC SIGROK
+  "DelugeProbe CDC-DEBUG",             // 9: Interface descriptor for CDC DEBUG
 };
 
 static uint16_t _desc_str[32];

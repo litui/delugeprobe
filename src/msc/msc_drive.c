@@ -65,25 +65,28 @@
 #endif
 
 #define README_CONTENTS \
-"This is Yet Another Picoprobe v" PICOPROBE_VERSION_STRING  _GIT_HASH ".\r\n\r\n\
+"This is the LitLink DelugeProbe v" PICOPROBE_VERSION_STRING  _GIT_HASH ".\r\n\
+based on Yet Another Picoprobe v1.14-8a6a9ad.\r\n\r\n\
 - CURRENT.UF2 mirrors the flash content of the target\r\n\
-- INFO_UF2.TXT holds some information about probe and target\r\n\
-- drop a UF2 file to flash the target device\r\n"
+- RAM.UF2 mirrors the RAM content of the target\r\n\
+- INFO_UF2.TXT holds some information about this probe and the target\r\n\
+- Configure this device as a CMSIS-DAP device in OpenOCD\r\n\
+- you can also drop a .UF2 or .BIN file here to flash the target\r\n\r\n"
 #define README_SIZE            (sizeof(README_CONTENTS) - 1)
 
-#define INDEXHTM_CONTENTS \
-"<html><head>\r\n\
-<meta http-equiv=\"refresh\" content=\"0;URL='https://github.com/rgrr/yapicoprobe/tree/" GIT_HASH "'\"/>\r\n\
-</head>\r\n\
-<body>Redirecting to <a href=\"https://github.com/rgrr/yapicoprobe/tree/rg-\">yapicoprobe repository</a></body>\r\n\
-</html>\r\n"
-#define INDEXHTM_SIZE          (sizeof(INDEXHTM_CONTENTS) - 1)
+// #define INDEXHTM_CONTENTS 
+// "<html><head>\r\n
+// <meta http-equiv=\"refresh\" content=\"0;URL='https://github.com/rgrr/yapicoprobe/tree/" GIT_HASH "'\"/>\r\n
+// </head>\r\n
+// <body>Redirecting to <a href=\"https://github.com/rgrr/yapicoprobe/tree/rg-\">yapicoprobe repository</a></body>\r\n
+// </html>\r\n"
+// #define INDEXHTM_SIZE          (sizeof(INDEXHTM_CONTENTS) - 1)
 
 #define INFOUF2_CONTENTS \
 "UF2 Target Programmer v" PICOPROBE_VERSION_STRING _GIT_HASH " for %s%s\r\n\
-Model: Yet Another Picoprobe\r\n\
+Model: LitLink DelugeProbe (based on YAPicoprobe)\r\n\
 Board-ID: %s\r\n"
-#define INFOUF2_SIZE           150                                              // generated text must fit into buffer
+#define INFOUF2_SIZE           200                                              // generated text must fit into buffer
 
 
 #define BPB_BytsPerSec              512UL
@@ -143,10 +146,10 @@ const uint32_t f_InfoUF2TxtStartSector = c_FirstSectorofCluster(f_InfoUF2TxtStar
 const uint32_t f_InfoUF2TxtSectors = BPB_SecPerClus * f_InfoUF2TxtClusters;
 const uint32_t f_InfoUF2TxtSize = BPB_BytsPerSec;
 
-const uint32_t f_IndexHtmStartCluster = 6;
-const uint32_t f_IndexHtmClusters = 1;
-const uint32_t f_IndexHtmStartSector = c_FirstSectorofCluster(f_IndexHtmStartCluster);
-const uint32_t f_IndexHtmSectors = BPB_SecPerClus * f_IndexHtmClusters;
+// const uint32_t f_IndexHtmStartCluster = 6;
+// const uint32_t f_IndexHtmClusters = 1;
+// const uint32_t f_IndexHtmStartSector = c_FirstSectorofCluster(f_IndexHtmStartCluster);
+// const uint32_t f_IndexHtmSectors = BPB_SecPerClus * f_IndexHtmClusters;
 
 #define f_CurrentUF2StartCluster      16
 #define f_CurrentUF2Clusters          (CLUSTERS(TARGET_FLASH_UF2_SIZE))
@@ -182,8 +185,8 @@ static const uint8_t bootsector[BPB_BytsPerSec] =
         ADWORD(BPB_TotSec32),                             // BPB_TotSec32
 
         // byte 36 and more:
-                           BS_DrvNum, 0x00, 0x29,       ADWORD(BS_VolID),  'Y',  'A',  'P',  'i',  'c',
-         'o',  'p',  'r',  'o',  'b',  'e',
+                           BS_DrvNum, 0x00, 0x29,       ADWORD(BS_VolID),  'D',  'e',  'l',  'u',  'g',
+         'e',  'P',  'r',  'o',  'b',  'e',
                                              'F',  'A',  'T',  '1',  '2',  ' ',  ' ',  ' ', 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -231,7 +234,7 @@ static const uint8_t fatsector[] =
         AFAT12(0xfff, 0xff7),
 
         // cluster 6 (0_README.TXT) & 7 (bad) - must be f_IndexHtmStartCluster
-        AFAT12(0xfff, 0xff7),
+        // AFAT12(0xfff, 0xff7),
 
 		// cluster 8..15 (8) are spares
 		AFAT12(0xff7, 0xff7), AFAT12(0xff7, 0xff7), AFAT12(0xff7, 0xff7), AFAT12(0xff7, 0xff7),
@@ -243,7 +246,7 @@ static const uint8_t rootdirsector[] =
     //------------- Block2: Root Directory -------------//
     {
         // first entry is volume label
-        'Y', 'A', 'P', 'i', 'c', 'o', 'p', 'r', 'o', 'b', 'e',            // DIR_Name
+        'D', 'e', 'l', 'u', 'g', 'e', 'P', 'r', 'o', 'b', 'e',            // DIR_Name
         0x08,                                                             // DIR_Attr: ATTR_VOLUME_ID
         0,                                                                // DIR_NTRes
         0,                                                                // DIR_CrtTimeTenth
@@ -285,18 +288,18 @@ static const uint8_t rootdirsector[] =
         ADWORD(INFOUF2_SIZE),                                             // DIR_FileSize
 
         // fourth entry is "INDEX.HTM"
-        'I', 'N', 'D', 'E', 'X', ' ', ' ', ' ', 'H', 'T', 'M',
-        0x01,                                                             // DIR_Attr: ATTR_READ_ONLY
-        0,                                                                // DIR_NTRes
-        0,                                                                // DIR_CrtTimeTenth
-        ATIME(12, 0, 0),                                                  // DIR_CrtTime
-        ADATE(2022, 12, 6),                                               // DIR_CrtDate
-        ADATE(2022, 12, 6),                                               // DIR_LstAccDate
-        AWORD(0),                                                         // DIR_FstClusHi
-        ATIME(12, 0, 0),                                                  // DIR_WrtTime
-        ADATE(2022, 12, 6),                                               // DIR_WrtDate
-        AWORD(f_IndexHtmStartCluster),                                    // DIR_FstClusLO
-        ADWORD(INDEXHTM_SIZE),                                            // DIR_FileSize
+        // 'I', 'N', 'D', 'E', 'X', ' ', ' ', ' ', 'H', 'T', 'M',
+        // 0x01,                                                             // DIR_Attr: ATTR_READ_ONLY
+        // 0,                                                                // DIR_NTRes
+        // 0,                                                                // DIR_CrtTimeTenth
+        // ATIME(12, 0, 0),                                                  // DIR_CrtTime
+        // ADATE(2022, 12, 6),                                               // DIR_CrtDate
+        // ADATE(2022, 12, 6),                                               // DIR_LstAccDate
+        // AWORD(0),                                                         // DIR_FstClusHi
+        // ATIME(12, 0, 0),                                                  // DIR_WrtTime
+        // ADATE(2022, 12, 6),                                               // DIR_WrtDate
+        // AWORD(f_IndexHtmStartCluster),                                    // DIR_FstClusLO
+        // ADWORD(INDEXHTM_SIZE),                                            // DIR_FileSize
 
         // more entries are appended via append_dir_entry()
     };
@@ -392,8 +395,8 @@ static void insert_fat_entry(uint8_t *buf, uint16_t start, uint16_t entry_no, ui
 // Application fill vendor id, product id and revision with string up to 8, 16, 4 characters respectively
 void tud_msc_inquiry_cb(uint8_t lun, uint8_t vendor_id[8], uint8_t product_id[16], uint8_t product_rev[4])
 {
-    const char vid[ 8] = "DAPLink\0";
-    const char pid[16] = "YAPicoprobe\0\0\0\0\0";
+    const char vid[ 8] = "LitLink\0";
+    const char pid[16] = "DelugeProbe\0\0\0\0\0";
     const char rev[]   = PICOPROBE_VERSION_STRING "\0\0\0\0";
 
     memcpy(vendor_id, vid, 8);
@@ -543,10 +546,10 @@ int32_t tud_msc_read10_cb(uint8_t lun, uint32_t lba, uint32_t offset, void* buff
         }
         r = read_sector_from_buffer(buffer, (const uint8_t *)buf, sizeof(buf), lba - f_InfoUF2TxtStartSector);
     }
-    else if (lba >= f_IndexHtmStartSector  &&  lba < f_IndexHtmStartSector + f_IndexHtmSectors) {
-//        picoprobe_info("  INDEX.HTM\n");
-        r = read_sector_from_buffer(buffer, (const uint8_t *)INDEXHTM_CONTENTS, INDEXHTM_SIZE, lba - f_IndexHtmStartSector);
-    }
+//     else if (lba >= f_IndexHtmStartSector  &&  lba < f_IndexHtmStartSector + f_IndexHtmSectors) {
+// //        picoprobe_info("  INDEX.HTM\n");
+//         r = read_sector_from_buffer(buffer, (const uint8_t *)INDEXHTM_CONTENTS, INDEXHTM_SIZE, lba - f_IndexHtmStartSector);
+//     }
     else if (lba >= f_CurrentUF2StartSector  &&  lba < f_CurrentUF2StartSector + f_CurrentUF2Sectors) {
         const uint32_t payload_size = 256;
         const uint32_t num_blocks   = f_CurrentUF2Sectors;

@@ -57,15 +57,18 @@ const uint32_t swd_id_rp2040    = (0x927) + (0x0002 << 12);    // taken from RP2
 const uint32_t swd_id_nrf52832  = 0x00052832;                  // see FICR.INFO.PART
 const uint32_t swd_id_nrf52833  = 0x00052833;
 const uint32_t swd_id_nrf52840  = 0x00052840;
+const uint32_t swd_id_rza1lu    = 0x3ba02477; // taken from DPIDR on MBed controller
 
 // IDs for UF2 identification, use the following command to obtain recent list:
 // curl https://raw.githubusercontent.com/microsoft/uf2/master/utils/uf2families.json | jq -r '.[] | "\(.id)\t\(.description)"' | sort -k 2
+const uint32_t uf2_id_rza1lu    = 0x9517422f;  // random pick
 const uint32_t uf2_id_nrf52     = 0x1b57745f;
 const uint32_t uf2_id_nrf52833  = 0x621e937a;
 const uint32_t uf2_id_nrf52840  = 0xada52840;
 const uint32_t uf2_id_rp2040    = 0xe48bff56;
 
 // IDs for board identification (but whatfor?)
+#define board_id_rza1lu_deluge    "7f01"  // no idea if this will work
 #define board_id_nrf52832_dk      "1101"
 #define board_id_nrf52833_dk      "1101"
 #define board_id_nrf52840_dk      "1102"
@@ -113,14 +116,13 @@ target_cfg_t target_device_generic = {
     .ram_regions[0].end             = 0x20000000 + KB(256),
     .erase_reset                    = 1,
     .target_vendor                  = "Generic",
-    .target_part_number             = "cortex_m",
+    .target_part_number             = "cortex_a",
     .rt_family_id                   = kStub_SWSysReset_FamilyID,
     .rt_board_id                    = "ffff",
     .rt_uf2_id                      = 0,                               // this also implies no write operation
     .rt_max_swd_khz                 = 10000,
     .rt_swd_khz                     = 2000,
 };
-
 
 // target information for SWD not connected
 target_cfg_t target_device_disconnected = {
@@ -143,13 +145,11 @@ target_cfg_t target_device_disconnected = {
     .rt_swd_khz                     = 2000,
 };
 
-
+extern target_cfg_t target_device_rza1lu;
 
 extern target_cfg_t target_device_nrf52;
 extern target_cfg_t target_device_nrf52833;
 extern target_cfg_t target_device_nrf52840;
-
-
 
 static void search_family(void)
 {
@@ -199,6 +199,29 @@ void pico_prerun_board_config(void)
                     target_device.flash_regions[0].end = target_device.flash_regions[0].start + size;
                 }
             }
+        }
+    }
+
+    if (!target_found) {
+        // check for Renesas chip r7s721020
+
+        target_device = target_device_rza1lu;
+        target_device.rt_family_id   = kRenesas_FamilyID;
+        target_device.rt_board_id    = board_id_rza1lu_deluge;
+        target_device.rt_uf2_id      = uf2_id_rza1lu;
+        target_device.rt_max_swd_khz = 10000;
+        target_device.rt_swd_khz     = 6000;
+        target_device.target_part_number = "rza1lu";
+        strcpy(board_vendor, "SynthstromAudible");
+        strcpy(board_name, "Deluge");
+
+        search_family();
+        if (target_set_state(ATTACH)) {
+            uint32_t info_part;
+            uint32_t info_ram;
+            uint32_t info_flash;
+
+            target_found = true;
         }
     }
 

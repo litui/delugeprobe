@@ -9,45 +9,41 @@
 //       SHOULD ONLY CONSIST OF PREPROCESSOR DIRECTIVES
 // -----------------------------------------------------
 
-// This header may be included by other board headers as "boards/pico.h".
+// This header may be included by other board headers as "boards/qt_py_rp2040.h".
 // But normally this is included via "#include <pico/stdlib.h>" if PICO_BOARD is set accordingly.
 
-#ifndef _BOARDS_PICO_H
-#define _BOARDS_PICO_H
+#ifndef _BOARDS_QT_PY_RP2040
+#define _BOARDS_QT_PY_RP2040
 
 // For board detection
-#define RASPBERRYPI_PICO
-
-#ifdef BOARD_QT_PY_RP2040
-#include "qt_py_rp2040.h"
-#else
+#define QT_PY_RP2040
 
 // --- UART ---
 #ifndef PICO_DEFAULT_UART
 #define PICO_DEFAULT_UART 0
 #endif
 #ifndef PICO_DEFAULT_UART_TX_PIN
-#define PICO_DEFAULT_UART_TX_PIN 0
+#define PICO_DEFAULT_UART_TX_PIN 28
 #endif
 #ifndef PICO_DEFAULT_UART_RX_PIN
-#define PICO_DEFAULT_UART_RX_PIN 1
+#define PICO_DEFAULT_UART_RX_PIN 29
 #endif
 
 // --- LED ---
 #ifndef PICO_DEFAULT_LED_PIN
-#define PICO_DEFAULT_LED_PIN 25
+#define PICO_DEFAULT_LED_PIN 34
 #endif
 // no PICO_DEFAULT_WS2812_PIN
 
 // --- I2C ---
 #ifndef PICO_DEFAULT_I2C
-#define PICO_DEFAULT_I2C 0
+#define PICO_DEFAULT_I2C 1
 #endif
 #ifndef PICO_DEFAULT_I2C_SDA_PIN
-#define PICO_DEFAULT_I2C_SDA_PIN 4
+#define PICO_DEFAULT_I2C_SDA_PIN 22
 #endif
 #ifndef PICO_DEFAULT_I2C_SCL_PIN
-#define PICO_DEFAULT_I2C_SCL_PIN 5
+#define PICO_DEFAULT_I2C_SCL_PIN 23
 #endif
 
 // --- SPI ---
@@ -80,7 +76,7 @@
 #endif
 
 // Drive high to force power supply into PWM mode (lower ripple on 3V3 at light loads)
-#define PICO_SMPS_MODE_PIN 23
+#define PICO_SMPS_MODE_PIN -1
 
 #ifndef PICO_RP2040_B0_SUPPORTED
 #define PICO_RP2040_B0_SUPPORTED 1
@@ -105,12 +101,15 @@
 // PIO config
 #define PROBE_PIO                pio0
 #define PROBE_SM                 0
-#define PROBE_PIN_OFFSET         1
-#define PROBE_PIN_COUNT          3
-#define PROBE_PIN_SWDIR          (PROBE_PIN_OFFSET + 0) // 1
-#define PROBE_PIN_SWCLK          (PROBE_PIN_OFFSET + 1) // 2
-#define PROBE_PIN_SWDIO          (PROBE_PIN_OFFSET + 2) // 3
-#define PROBE_PIN_RESET          6                      // Target reset config
+#define PROBE_PIN_OFFSET         2
+#define PROBE_PIN_COUNT          4
+#define PROBE_PIN_SWDIR          2 // ?
+// #define PROBE_PIN_SWDIR          (PROBE_PIN_OFFSET + 0) // 1
+#define PROBE_PIN_SWCLK          6
+// #define PROBE_PIN_SWCLK          (PROBE_PIN_OFFSET + 1) // 2
+#define PROBE_PIN_SWDIO          3
+// #define PROBE_PIN_SWDIO          (PROBE_PIN_OFFSET + 2) // 3
+#define PROBE_PIN_RESET          21                     // Target reset config
 // #define PROBE_MAX_KHZ         now in g_board_info.target_cfg->rt_max_swd_kHz, setup in pico::pico_prerun_board_config()
 
 // UART config (UART target -> probe)
@@ -139,16 +138,15 @@
 //GP26-28 are ADC.
 
 // number of analog channels
-#define SR_NUM_A_CHAN            3
+#define SR_NUM_A_CHAN            4
 // first digital channel port
-#define SR_BASE_D_CHAN           10
+#define SR_BASE_D_CHAN           24
 // number of digital channels
-#define SR_NUM_D_CHAN            8
+#define SR_NUM_D_CHAN            2
 // Storage size of the DMA buffer.  The buffer is split into two halves so that when the first
 // buffer fills we can send the trace data serially while the other buffer is DMA'd into.
 // 102000 buffer size allows 200000 of D4 samples.
 #define SR_DMA_BUF_SIZE          102000
 
 
-#endif
 #endif

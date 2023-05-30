@@ -109,6 +109,8 @@ target_sources(${PROJECT} PRIVATE
         src/daplink/daplink/interface/swd_host.c
         src/daplink/daplink/interface/target_flash.c
         src/daplink/daplink/settings/settings_rom_stub.c
+        src/daplink/family/renesas/target_reset_rza.c
+        src/daplink/family/renesas/rza1lu/target.c
         src/daplink/family/nordic/target_reset_nrf52.c
         src/daplink/family/nordic/nrf52/target.c
         src/daplink/target/target_board.c
@@ -143,6 +145,12 @@ add_compile_definitions(DAPLINK_HIC_ID=0x08154711)
 
 # required to get required DAPLink functions
 add_compile_definitions(DRAG_N_DROP_SUPPORT=1)
+
+# required for Renesas drag n drop
+add_compile_definitions(TARGET_MCU_CORTEX_A=1)
+
+# required for QT Py RP2040
+# add_compile_definitions(BOARD_QT_PY_RP2040=1)
 
 #--------------------------------------------------------------------------------------------------
 #
