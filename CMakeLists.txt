@@ -20,7 +20,7 @@ set(PICO_BOARD_HEADER_DIRS  ${CMAKE_CURRENT_LIST_DIR}/include/boards)
 pico_sdk_init()
 
 
-project(${PROJECT})
+project(${PROJECT} "C" "CXX")
 
 string(TOUPPER ${PICO_BOARD} PICO_BOARD_UPPER)
 
