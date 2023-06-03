@@ -2,4 +2,4 @@ build/**
 generated/**
 .vscode/**
 pico-sdk/**
-
+images/**

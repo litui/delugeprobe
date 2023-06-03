@@ -89,7 +89,11 @@ create-images:
 	#
 	$(MAKE) cmake-create-debug PICO_BOARD=seeed_rp2040
 	$(MAKE) all
-	cp $(BUILD_DIR)/$(PROJECT).uf2 images/delugeprobe-$(shell printf "%02d%02d" $(VERSION_MAJOR) $(VERSION_MINOR))-picodebugprobe-$(GIT_HASH).uf2
+	cp $(BUILD_DIR)/$(PROJECT).uf2 images/delugeprobe-$(shell printf "%02d%02d" $(VERSION_MAJOR) $(VERSION_MINOR))-seeed_xiao_rp2040-$(GIT_HASH).uf2
+	#
+	$(MAKE) cmake-create-debug PICO_BOARD=qt_py_rp2040
+	$(MAKE) all
+	cp $(BUILD_DIR)/$(PROJECT).uf2 images/delugeprobe-$(shell printf "%02d%02d" $(VERSION_MAJOR) $(VERSION_MINOR))-qt_py_rp2040-$(GIT_HASH).uf2
 
 
 .PHONY: check-clang

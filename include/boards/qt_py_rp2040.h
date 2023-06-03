@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2020 Raspberry Pi (Trading) Ltd.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+
 // -----------------------------------------------------
 // NOTE: THIS HEADER IS ALSO INCLUDED BY ASSEMBLER SO
 //       SHOULD ONLY CONSIST OF PREPROCESSOR DIRECTIVES
@@ -17,10 +23,10 @@
 #define PICO_DEFAULT_UART 0
 #endif
 #ifndef PICO_DEFAULT_UART_TX_PIN
-#define PICO_DEFAULT_UART_TX_PIN 28
+#define PICO_DEFAULT_UART_TX_PIN 0
 #endif
 #ifndef PICO_DEFAULT_UART_RX_PIN
-#define PICO_DEFAULT_UART_RX_PIN 29
+#define PICO_DEFAULT_UART_RX_PIN 1
 #endif
 
 // --- LED ---
@@ -42,13 +48,13 @@
 
 // --- SPI ---
 #ifndef PICO_DEFAULT_SPI
-#define PICO_DEFAULT_SPI 0
+#define PICO_DEFAULT_SPI 1
 #endif
 #ifndef PICO_DEFAULT_SPI_SCK_PIN
-#define PICO_DEFAULT_SPI_SCK_PIN 18
+#define PICO_DEFAULT_SPI_SCK_PIN 14
 #endif
 #ifndef PICO_DEFAULT_SPI_TX_PIN
-#define PICO_DEFAULT_SPI_TX_PIN 19
+#define PICO_DEFAULT_SPI_TX_PIN 15
 #endif
 #ifndef PICO_DEFAULT_SPI_RX_PIN
 #define PICO_DEFAULT_SPI_RX_PIN 16
@@ -78,12 +84,12 @@
 
 // Pin get VBUS
 #ifndef PICO_VBUS_PIN
-#define PICO_VBUS_PIN 24
+#define PICO_VBUS_PIN 19
 #endif
 
 // Pin used to monitor VSYS using ADC
 #ifndef PICO_VSYS_PIN
-#define PICO_VSYS_PIN 29
+#define PICO_VSYS_PIN 15
 #endif
 
 
@@ -96,7 +102,7 @@
 #define PROBE_PIO                pio0
 #define PROBE_SM                 0
 #define PROBE_PIN_OFFSET         2
-#define PROBE_PIN_COUNT          4
+#define PROBE_PIN_COUNT          5
 #define PROBE_PIN_SWDIR          2 // ?
 // #define PROBE_PIN_SWDIR          (PROBE_PIN_OFFSET + 0) // 1
 #define PROBE_PIN_SWCLK          6
@@ -107,7 +113,7 @@
 // #define PROBE_MAX_KHZ         now in g_board_info.target_cfg->rt_max_swd_kHz, setup in pico::pico_prerun_board_config()
 
 // UART config (UART target -> probe)
-#define PICOPROBE_UART_TX        4
+#define PICOPROBE_UART_TX        20
 #define PICOPROBE_UART_RX        5
 #define PICOPROBE_UART_INTERFACE uart1
 #define PICOPROBE_UART_BAUDRATE  115200

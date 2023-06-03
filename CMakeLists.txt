@@ -156,9 +156,6 @@ add_compile_definitions(DRAG_N_DROP_SUPPORT=1)
 # required for Renesas drag n drop
 add_compile_definitions(TARGET_MCU_CORTEX_A=1)
 
-# required for QT Py RP2040
-# add_compile_definitions(BOARD_QT_PY_RP2040=1)
-
 #--------------------------------------------------------------------------------------------------
 #
 # this is for SIGROK operation (taken from https://github.com/pico-coder/sigrok-pico)

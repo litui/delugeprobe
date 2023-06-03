@@ -42,13 +42,8 @@ tusb_desc_device_t const desc_device =
     .bDeviceProtocol    = 0x00,
     .bMaxPacketSize0    = CFG_TUD_ENDPOINT0_SIZE,
 
-#ifdef BOARD_QT_PY_RP2040
-    .idVendor           = 0x239A, // Hmm
-    .idProduct          = 0x80f7, // QT Py RP2040
-#else
     .idVendor           = 0x2E8A, // Pi
     .idProduct          = 0x000c, // CMSIS-DAP adapter
-#endif
     .bcdDevice          = (PICOPROBE_VERSION_MAJOR << 8) + (16*(PICOPROBE_VERSION_MINOR / 10)) + PICOPROBE_VERSION_MINOR % 10,
     .iManufacturer      = 0x01,
     .iProduct           = 0x02,
