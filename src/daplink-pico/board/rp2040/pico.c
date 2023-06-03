@@ -54,24 +54,15 @@
 
 // these are IDs for target identification, required registers to identify may/do differ
 const uint32_t swd_id_rp2040    = (0x927) + (0x0002 << 12);    // taken from RP2040 SDK platform.c
-const uint32_t swd_id_nrf52832  = 0x00052832;                  // see FICR.INFO.PART
-const uint32_t swd_id_nrf52833  = 0x00052833;
-const uint32_t swd_id_nrf52840  = 0x00052840;
 const uint32_t swd_id_rza1lu    = 0x3ba02477; // taken from DPIDR on MBed controller
 
 // IDs for UF2 identification, use the following command to obtain recent list:
 // curl https://raw.githubusercontent.com/microsoft/uf2/master/utils/uf2families.json | jq -r '.[] | "\(.id)\t\(.description)"' | sort -k 2
 const uint32_t uf2_id_rza1lu    = 0x9517422f;  // random pick
-const uint32_t uf2_id_nrf52     = 0x1b57745f;
-const uint32_t uf2_id_nrf52833  = 0x621e937a;
-const uint32_t uf2_id_nrf52840  = 0xada52840;
 const uint32_t uf2_id_rp2040    = 0xe48bff56;
 
 // IDs for board identification (but whatfor?)
 #define board_id_rza1lu_deluge    "5501"  // yoinked from the GR-LYCHEE
-#define board_id_nrf52832_dk      "1101"
-#define board_id_nrf52833_dk      "1101"
-#define board_id_nrf52840_dk      "1102"
 #define board_id_rp2040_pico      "7f01"
 
 // here we can modify the otherwise constant board/target information
@@ -147,10 +138,6 @@ target_cfg_t target_device_disconnected = {
 
 extern target_cfg_t target_device_rza1lu;
 
-extern target_cfg_t target_device_nrf52;
-extern target_cfg_t target_device_nrf52833;
-extern target_cfg_t target_device_nrf52840;
-
 static void search_family(void)
 {
     // force search of family
@@ -164,7 +151,7 @@ static void search_family(void)
 
 /**
  * Search the correct board / target / family.
- * Currently nRF52840 and RP2040 are auto detected.
+ * Currently Renesas r7s7210xx and RP2040 are auto detected.
  *
  * Global outputs are \a g_board_info, \a g_target_family.  These are the only variables that should be (read) accessed
  * externally.
@@ -232,63 +219,6 @@ void pico_prerun_board_config(void)
 
             if (dbg_id == swd_id_rza1lu) {
                 target_found = true;
-            }
-        }
-    }
-
-    if ( !target_found) {
-        // check for nRF52832, nRF52833 or nRF52840
-        // DK names taken from https://infocenter.nordicsemi.com/topic/ug_gsg_ses/UG/gsg/chips_and_sds.html
-        target_device = target_device_nrf52840;
-        target_device.rt_family_id   = kNordic_Nrf52_FamilyID;
-        target_device.rt_board_id    = board_id_nrf52840_dk;
-        target_device.rt_uf2_id      = uf2_id_nrf52840;
-        target_device.rt_max_swd_khz = 10000;
-        target_device.rt_swd_khz     = 6000;
-        target_device.target_part_number = "nRF52840";
-        strcpy(board_vendor, "NordicSemiconductor");
-        strcpy(board_name, "PCA10056");
-
-        search_family();
-        if (target_set_state(ATTACH)) {
-            uint32_t info_part;
-            uint32_t info_ram;
-            uint32_t info_flash;
-
-            // reading flash/RAM size is Nordic special
-            r = swd_read_word(0x10000100, &info_part)  &&  swd_read_word(0x1000010c, &info_ram)  &&  swd_read_word(0x10000110, &info_flash);
-            if (r  &&  info_part == swd_id_nrf52832) {
-                target_found = true;
-                target_device = target_device_nrf52;
-                target_device.rt_family_id   = kNordic_Nrf52_FamilyID;
-                target_device.rt_board_id    = board_id_nrf52832_dk;
-                target_device.rt_uf2_id      = uf2_id_nrf52;
-                target_device.rt_max_swd_khz = 10000;
-                target_device.rt_swd_khz     = 6000;
-                target_device.target_part_number = "nRF52832";
-                strcpy(board_vendor, "NordicSemiconductor");
-                strcpy(board_name, "PCA10040");
-                target_device.flash_regions[0].end = target_device.flash_regions[0].start + 1024 * info_flash;
-                target_device.ram_regions[0].end   = target_device.ram_regions[0].start + 1024 * info_ram;
-            }
-            else if (r  &&  info_part == swd_id_nrf52833) {
-                target_found = true;
-                target_device = target_device_nrf52833;
-                target_device.rt_family_id   = kNordic_Nrf52_FamilyID;
-                target_device.rt_board_id    = board_id_nrf52833_dk;
-                target_device.rt_uf2_id      = uf2_id_nrf52833;
-                target_device.rt_max_swd_khz = 10000;
-                target_device.rt_swd_khz     = 6000;
-                target_device.target_part_number = "nRF52833";
-                strcpy(board_vendor, "NordicSemiconductor");
-                strcpy(board_name, "PCA10100");
-                target_device.flash_regions[0].end = target_device.flash_regions[0].start + 1024 * info_flash;
-                target_device.ram_regions[0].end   = target_device.ram_regions[0].start + 1024 * info_ram;
-            }
-            else if (r  &&  info_part == swd_id_nrf52840) {
-                target_found = true;
-                target_device.flash_regions[0].end = target_device.flash_regions[0].start + 1024 * info_flash;
-                target_device.ram_regions[0].end   = target_device.ram_regions[0].start + 1024 * info_ram;
             }
         }
     }

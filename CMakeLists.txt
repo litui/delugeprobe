@@ -120,8 +120,6 @@ target_sources(${PROJECT} PRIVATE
         src/daplink/daplink/settings/settings_rom_stub.c
         src/daplink/family/renesas/target_reset_rza1lu.c
         src/daplink/family/renesas/rza1lu/target.c
-        src/daplink/family/nordic/target_reset_nrf52.c
-        src/daplink/family/nordic/nrf52/target.c
         src/daplink/target/target_board.c
         src/daplink/target/target_family.c
         src/daplink-pico/board/rp2040/pico.c
