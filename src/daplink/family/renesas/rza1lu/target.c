@@ -1,6 +1,6 @@
 /**
  * @file    target.c
- * @brief   Target information for the GR-LYCHEE
+ * @brief   Target information for the RZA1LU based on the GR-LYCHEE profile
  *
  * DAPLink Interface Firmware
  * Copyright (c) 2009-2019, ARM Limited, All Rights Reserved
@@ -37,5 +37,5 @@ target_cfg_t target_device_rza1lu = {
     .ram_regions[0].end             = 0x20300000,
     .erase_reset                    = 1,
     .target_vendor                  = "Renesas",
-    .target_part_number             = "r7s721020"
+    .target_part_number             = "r7s7210xx"
 };

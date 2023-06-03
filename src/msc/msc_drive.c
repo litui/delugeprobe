@@ -151,7 +151,7 @@ const uint32_t f_InfoUF2TxtSize = BPB_BytsPerSec;
 // const uint32_t f_IndexHtmStartSector = c_FirstSectorofCluster(f_IndexHtmStartCluster);
 // const uint32_t f_IndexHtmSectors = BPB_SecPerClus * f_IndexHtmClusters;
 
-#define f_CurrentUF2StartCluster      16
+#define f_CurrentUF2StartCluster      6
 #define f_CurrentUF2Clusters          (CLUSTERS(TARGET_FLASH_UF2_SIZE))
 #define f_CurrentUF2StartSector       (c_FirstSectorofCluster(f_CurrentUF2StartCluster))
 #define f_CurrentUF2Sectors           (BPB_SecPerClus * f_CurrentUF2Clusters)
@@ -235,6 +235,7 @@ static const uint8_t fatsector[] =
 
         // cluster 6 (0_README.TXT) & 7 (bad) - must be f_IndexHtmStartCluster
         // AFAT12(0xfff, 0xff7),
+        AFAT12(0xff7, 0xff7),  // Mark as bad
 
 		// cluster 8..15 (8) are spares
 		AFAT12(0xff7, 0xff7), AFAT12(0xff7, 0xff7), AFAT12(0xff7, 0xff7), AFAT12(0xff7, 0xff7),

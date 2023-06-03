@@ -528,17 +528,18 @@ int main(void)
 #endif
     picoprobe_info_out("\n");
 #if defined(TARGET_BOARD_PICO)
-    #if defined(BOARD_QT_PY_RP2040)
-        picoprobe_info("  Probe HW: QT Py RP2040\n");
-    #else
-        picoprobe_info("  Probe HW: Pico\n");
-    #endif
 #elif defined(TARGET_BOARD_PICO_W)
     picoprobe_info("  Probe HW: Pico_W\n");
 #elif defined(TARGET_BOARD_PICO_DEBUG_PROBE)
     picoprobe_info("  Probe HW: Pico Debug Probe\n");
 #else
-    picoprobe_info("  Running on UNKNOWN board\n");
+    #if defined(QT_PY_RP2040)
+        picoprobe_info("  Probe HW: QT Py RP2040\n");
+    #elif defined(SEEED_RP2040)
+        picoprobe_info("  Probe HW: Seeed XIAO RP2040\n");
+    #else
+        picoprobe_info("  Running on UNKNOWN board\n");
+    #endif
 #endif
     picoprobe_info("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
 

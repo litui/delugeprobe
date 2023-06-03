@@ -4,7 +4,7 @@
 #
 
 VERSION_MAJOR        := 1
-VERSION_MINOR        := 1
+VERSION_MINOR        := 2
 
 BUILD_DIR            := build
 PROJECT              := picoprobe
@@ -12,7 +12,8 @@ PROJECT              := picoprobe
 
 GIT_HASH := $(shell git rev-parse --short HEAD)
 
-CMAKE_FLAGS  = -DPICOPROBE_VERSION_MAJOR=$(VERSION_MAJOR)
+# CMAKE_FLAGS = -DCMAKE_TOOLCHAIN_FILE=toolchain.cmake
+CMAKE_FLAGS = -DPICOPROBE_VERSION_MAJOR=$(VERSION_MAJOR)
 CMAKE_FLAGS += -DPICOPROBE_VERSION_MINOR=$(VERSION_MINOR)
 CMAKE_FLAGS += -DPROJECT=$(PROJECT)
 CMAKE_FLAGS += -DGIT_HASH=$(GIT_HASH)
@@ -76,15 +77,19 @@ create-images:
 	$(MAKE) cmake-create-debug PICO_BOARD=pico
 	$(MAKE) all
 	mkdir -p images
-	cp $(BUILD_DIR)/$(PROJECT).uf2 images/yapicoprobe-$(shell printf "%02d%02d" $(VERSION_MAJOR) $(VERSION_MINOR))-pico-$(GIT_HASH).uf2
+	cp $(BUILD_DIR)/$(PROJECT).uf2 images/delugeprobe-$(shell printf "%02d%02d" $(VERSION_MAJOR) $(VERSION_MINOR))-pico-$(GIT_HASH).uf2
 	#
 	$(MAKE) cmake-create-debug PICO_BOARD=pico_w
 	$(MAKE) all
-	cp $(BUILD_DIR)/$(PROJECT).uf2 images/yapicoprobe-$(shell printf "%02d%02d" $(VERSION_MAJOR) $(VERSION_MINOR))-picow-$(GIT_HASH).uf2
+	cp $(BUILD_DIR)/$(PROJECT).uf2 images/delugeprobe-$(shell printf "%02d%02d" $(VERSION_MAJOR) $(VERSION_MINOR))-picow-$(GIT_HASH).uf2
 	#
 	$(MAKE) cmake-create-debug PICO_BOARD=pico_debug_probe
 	$(MAKE) all
-	cp $(BUILD_DIR)/$(PROJECT).uf2 images/yapicoprobe-$(shell printf "%02d%02d" $(VERSION_MAJOR) $(VERSION_MINOR))-picodebugprobe-$(GIT_HASH).uf2
+	cp $(BUILD_DIR)/$(PROJECT).uf2 images/delugeprobe-$(shell printf "%02d%02d" $(VERSION_MAJOR) $(VERSION_MINOR))-picodebugprobe-$(GIT_HASH).uf2
+	#
+	$(MAKE) cmake-create-debug PICO_BOARD=seeed_rp2040
+	$(MAKE) all
+	cp $(BUILD_DIR)/$(PROJECT).uf2 images/delugeprobe-$(shell printf "%02d%02d" $(VERSION_MAJOR) $(VERSION_MINOR))-picodebugprobe-$(GIT_HASH).uf2
 
 
 .PHONY: check-clang

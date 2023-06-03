@@ -52,7 +52,7 @@
 #include "pico_target_utils.h"
 
 
-#define DEBUG_MODULE    0
+#define DEBUG_MODULE    1
 
 // DAPLink needs bigger buffer
 #define TARGET_WRITER_THREAD_MSGBUFF_SIZE   (16 * sizeof(struct uf2_block) + 100)

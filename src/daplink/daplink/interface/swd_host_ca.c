@@ -21,6 +21,7 @@
  * limitations under the License.
  */
 
+#ifdef TARGET_MCU_CORTEX_A
 #include <stdio.h>
 #include "device.h"
 #include "cmsis_os2.h"
@@ -1283,7 +1284,14 @@ uint8_t swd_uninit_debug(void)
 uint8_t swd_set_target_state_hw(target_state_t state)
 {
     uint32_t val;
-    swd_init();
+    int8_t ap_retries = 2;
+
+    printf("swd_set_target_state_hw(%d)\n", state);
+
+   /* Calling swd_init prior to entering RUN state causes operations to fail. */
+    if (state != RUN) {
+        swd_init();
+    }
 
     switch (state) {
         case RESET_HOLD:
@@ -1448,3 +1456,4 @@ uint8_t swd_set_target_state_sw(target_state_t state)
 
     return 1;
 }
+#endif

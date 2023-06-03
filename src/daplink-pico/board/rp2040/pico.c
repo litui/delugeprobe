@@ -68,7 +68,7 @@ const uint32_t uf2_id_nrf52840  = 0xada52840;
 const uint32_t uf2_id_rp2040    = 0xe48bff56;
 
 // IDs for board identification (but whatfor?)
-#define board_id_rza1lu_deluge    "7f01"  // no idea if this will work
+#define board_id_rza1lu_deluge    "5501"  // yoinked from the GR-LYCHEE
 #define board_id_nrf52832_dk      "1101"
 #define board_id_nrf52833_dk      "1101"
 #define board_id_nrf52840_dk      "1102"
@@ -116,7 +116,7 @@ target_cfg_t target_device_generic = {
     .ram_regions[0].end             = 0x20000000 + KB(256),
     .erase_reset                    = 1,
     .target_vendor                  = "Generic",
-    .target_part_number             = "cortex_a",
+    .target_part_number             = "cortex_m",
     .rt_family_id                   = kStub_SWSysReset_FamilyID,
     .rt_board_id                    = "ffff",
     .rt_uf2_id                      = 0,                               // this also implies no write operation
@@ -177,6 +177,8 @@ void pico_prerun_board_config(void)
     bool r;
     bool target_found = false;
 
+    // printf("Running pico_prerun_board_config...\n");
+
     target_device = target_device_generic;
     probe_set_swclk_freq(target_device.rt_swd_khz);                            // slow down during target probing
 
@@ -203,7 +205,7 @@ void pico_prerun_board_config(void)
     }
 
     if (!target_found) {
-        // check for Renesas chip r7s721020
+        // printf("Searching for renesas target\n");
 
         target_device = target_device_rza1lu;
         target_device.rt_family_id   = kRenesas_FamilyID;
@@ -211,17 +213,26 @@ void pico_prerun_board_config(void)
         target_device.rt_uf2_id      = uf2_id_rza1lu;
         target_device.rt_max_swd_khz = 10000;
         target_device.rt_swd_khz     = 6000;
-        target_device.target_part_number = "rza1lu";
-        strcpy(board_vendor, "SynthstromAudible");
+        target_device.target_part_number = "r7s7210xx";
+        strcpy(board_vendor, "Synthstrom");
         strcpy(board_name, "Deluge");
 
         search_family();
-        if (target_set_state(ATTACH)) {
-            uint32_t info_part;
-            uint32_t info_ram;
-            uint32_t info_flash;
+        // printf("Family ID found? %u\n", g_target_family->family_id);
 
-            target_found = true;
+        if (target_set_state(ATTACH)) {
+            uint32_t dbg_id;
+
+            // printf("Attached renesas target\n");
+            // printf("Checking for renesas chip.\r");
+
+            r = swd_read_dp(0x0, &dbg_id);
+            // printf("DBGID: %lu", dbg_id);
+            // printf("Comparing to: %lu\n", swd_id_rza1lu);
+
+            if (dbg_id == swd_id_rza1lu) {
+                target_found = true;
+            }
         }
     }
 

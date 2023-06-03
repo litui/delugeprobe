@@ -24,14 +24,14 @@
 #include "target_board.h"
 #include "swd_host.h"
 
-static uint8_t target_set_state_rza(target_state_t state)
+static uint8_t target_set_state_rza1lu(target_state_t state)
 {
     return swd_set_target_state_hw(state);
 }
 
 #define BINARY_DETECTION    (0xE59FF000)
 
-static uint8_t validate_bin_nvic_rza(const uint8_t *buf)
+static uint8_t validate_bin_nvic_rza1lu(const uint8_t *buf)
 {
     // Very dirty hacking here for ARMv7-A (non Cortex-M) binary detection
     // This returns validated result when start instrunction
@@ -46,15 +46,15 @@ static uint8_t validate_bin_nvic_rza(const uint8_t *buf)
     }
 }
 
-static uint8_t validate_hexfile_rza(const uint8_t *buf)
+static uint8_t validate_hexfile_rza1lu(const uint8_t *buf)
 {
     return 0;
 }
 
 const target_family_descriptor_t g_renesas_family = {
     .family_id = kRenesas_FamilyID,
-    .target_set_state = target_set_state_rza,
-    .validate_bin_nvic = validate_bin_nvic_rza,
-    .validate_hexfile = validate_hexfile_rza,
+    .target_set_state = target_set_state_rza1lu,
+    .validate_bin_nvic = validate_bin_nvic_rza1lu,
+    .validate_hexfile = validate_hexfile_rza1lu,
 };
 

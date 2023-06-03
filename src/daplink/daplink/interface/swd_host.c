@@ -21,9 +21,7 @@
  * limitations under the License.
  */
 
-#ifdef TARGET_MCU_CORTEX_A
-#include "swd_host_ca.c"
-#else
+// #ifndef TARGET_MCU_CORTEX_A
 #include <stdio.h>
 #include "device.h"
 #include "cmsis_os2.h"
@@ -1261,4 +1259,4 @@ uint8_t swd_set_target_state_sw(target_state_t state)
 
     return 1;
 }
-#endif
+// #endif

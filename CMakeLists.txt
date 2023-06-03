@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.12)
 
+# set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_LIST_DIR}/toolchain.cmake)
+
 #
 # board definition: pico or pico_w, default is pico
 #
@@ -13,12 +15,18 @@ set(PICO_STDIO_UART 0)
 #
 include(pico_sdk_import.cmake)
 
+# set(CMAKE_SYSTEM_NAME Generic)
+
 set(FREERTOS_KERNEL_PATH ${CMAKE_CURRENT_LIST_DIR}/freertos)
 include(FreeRTOS_Kernel_import.cmake)
 
 set(PICO_BOARD_HEADER_DIRS  ${CMAKE_CURRENT_LIST_DIR}/include/boards)
 pico_sdk_init()
 
+# set(CMAKE_C_COMPILER_FORCED TRUE)
+# set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
+# set(CMAKE_C_COMPILER_WORKS TRUE)
+#set(CMAKE_CXX_COMPILER_WORKS TRUE)
 
 project(${PROJECT} "C" "CXX")
 
@@ -32,6 +40,7 @@ add_definitions(
         -DPICO_HEAP_SIZE=0x0
         -DPICO_STACK_SIZE=0x400
         -DTARGET_BOARD_${PICO_BOARD_UPPER}
+        -DCMAKE_SYSTEM_NAME=Generic
 )
 
 #
@@ -109,7 +118,7 @@ target_sources(${PROJECT} PRIVATE
         src/daplink/daplink/interface/swd_host.c
         src/daplink/daplink/interface/target_flash.c
         src/daplink/daplink/settings/settings_rom_stub.c
-        src/daplink/family/renesas/target_reset_rza.c
+        src/daplink/family/renesas/target_reset_rza1lu.c
         src/daplink/family/renesas/rza1lu/target.c
         src/daplink/family/nordic/target_reset_nrf52.c
         src/daplink/family/nordic/nrf52/target.c
