@@ -1,4 +1,8 @@
-# DelugeProbe
+# DelugeProbe (Archival Notice)
+
+**Edit:** As of 2025, this is certainly not the recommended debugging solution for the Synthstrom Deluge. This fork has not been updated and was broken in a couple ways that never saw fixes (my bad). The original repo at [YAPicoprobe](https://github.com/rgrr/yapicoprobe/) has had lots of updates so go check it out!
+
+# DelugeProbe (Original Documentation)
 
 Based on [YAPicoprobe](https://github.com/rgrr/yapicoprobe/), DelugeProbe is a CMSIS-DAP debugger and firmware loader tailored to the hardware of the Synthstrom Audible Deluge's Renesas RZ/A1LU (R7S721020) processor. It has been released in anticipation of the June 5, 2023 opening of the Synthstrom Deluge source code as an acceptable substitute for the very expensive ($500-1500 USD) SEGGER JLink debugger.
 
